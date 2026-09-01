@@ -4,10 +4,21 @@ import { createRoot } from "react-dom/client";
 import "./styles.css";
 
 const friends = [
-  ["Neha", "🌸"], ["Sunita", "✨"], ["Indu", "🌷"], ["Chandan Bhai", "🫶"],
-  ["Soaib", "⭐"], ["Himanshu", "🌙"], ["Sonam", "💖"], ["Priti", "🌺"],
-  ["Prinsi", "🦋"], ["Shakshi", "🌼"], ["Neha 2", "💫"], ["Awanish", "🌿"],
-  ["Pari", "🧚"], ["Aapka Pyaar Doggy", "🐶"], ["Main", "❤️"]
+  ["Neha", "🌸"],
+  ["Sunita", "✨"],
+  ["Indu", "🌷"],
+  ["Chandan Bhai", "🫶"],
+  ["Soaib", "⭐"],
+  ["Himanshu", "🌙"],
+  ["Sonam", "💖"],
+  ["Priti", "🌺"],
+  ["Prinsi", "🦋"],
+  ["Shakshi", "🌼"],
+  ["Neha 2", "💫"],
+  ["Awanish", "🌿"],
+  ["Pari", "🧚"],
+  ["Aapka Pyaar Doggy", "🐶"],
+  ["Main", "❤️"]
 ];
 
 const places = [
@@ -50,22 +61,22 @@ const places = [
 
 function useReveal() {
   useEffect(() => {
-    const els = document.querySelectorAll("[data-reveal]");
+    const elements = document.querySelectorAll("[data-reveal]");
 
-    const io = new IntersectionObserver(
-      entries => {
-        entries.forEach(e => {
-          if (e.isIntersecting) {
-            e.target.classList.add("show");
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("show");
           }
         });
       },
       { threshold: 0.12 }
     );
 
-    els.forEach(el => io.observe(el));
+    elements.forEach((element) => observer.observe(element));
 
-    return () => io.disconnect();
+    return () => observer.disconnect();
   }, []);
 }
 
@@ -84,15 +95,15 @@ function Stars() {
 
   return (
     <div className="stars" aria-hidden="true">
-      {stars.map(s => (
+      {stars.map((star) => (
         <i
-          key={s.id}
+          key={star.id}
           style={{
-            left: `${s.left}%`,
-            top: `${s.top}%`,
-            width: s.size,
-            height: s.size,
-            animationDelay: `${s.delay}s`
+            left: star.left + "%",
+            top: star.top + "%",
+            width: star.size,
+            height: star.size,
+            animationDelay: star.delay + "s"
           }}
         />
       ))}
@@ -115,15 +126,15 @@ function Petals() {
 
   return (
     <div className="petals" aria-hidden="true">
-      {petals.map(p => (
+      {petals.map((petal) => (
         <span
-          key={p.id}
+          key={petal.id}
           style={{
-            left: `${p.left}%`,
-            animationDelay: `${p.delay}s`,
-            animationDuration: `${p.duration}s`,
-            width: p.size,
-            height: p.size
+            left: petal.left + "%",
+            animationDelay: petal.delay + "s",
+            animationDuration: petal.duration + "s",
+            width: petal.size,
+            height: petal.size
           }}
         >
           🌸
@@ -136,7 +147,7 @@ function Petals() {
 function TiltCard({ children, className = "" }) {
   const ref = useRef(null);
 
-  function move(e) {
+  function move(event) {
     if (
       !ref.current ||
       window.matchMedia("(max-width: 700px)").matches
@@ -144,13 +155,23 @@ function TiltCard({ children, className = "" }) {
       return;
     }
 
-    const r = ref.current.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width - 0.5;
-    const y = (e.clientY - r.top) / r.height - 0.5;
+    const rect = ref.current.getBoundingClientRect();
 
-    ref.current.style.transform = `perspective(900px) rotateY(${
-      x * 7
-    }deg) rotateX(${y * -7}deg) translateY(-5px)`;
+    const x =
+      (event.clientX - rect.left) / rect.width - 0.5;
+
+    const y =
+      (event.clientY - rect.top) / rect.height - 0.5;
+
+    ref.current.style.transform =
+      "perspective(900px) " +
+      "rotateY(" +
+      x * 7 +
+      "deg) " +
+      "rotateX(" +
+      y * -7 +
+      "deg) " +
+      "translateY(-5px)";
   }
 
   function reset() {
@@ -164,7 +185,7 @@ function TiltCard({ children, className = "" }) {
       ref={ref}
       onMouseMove={move}
       onMouseLeave={reset}
-      className={`tilt-card ${className}`}
+      className={"tilt-card " + className}
     >
       {children}
     </div>
@@ -220,7 +241,8 @@ function Hero({ onStart }) {
       </div>
 
       <div className="scroll-cue">
-        SCROLL TO EXPLORE <i>↓</i>
+        SCROLL TO EXPLORE
+        <i>↓</i>
       </div>
     </section>
   );
@@ -230,12 +252,17 @@ function Uttarakhand() {
   const [active, setActive] = useState("Nainital");
 
   return (
-    <section id="uttarakhand" className="section-shell uk-section">
+    <section
+      id="uttarakhand"
+      className="section-shell uk-section"
+    >
       <div className="section-title" data-reveal>
         <p>THE LAND OF MOUNTAINS</p>
+
         <h2>
           Uttarakhand <span>♡</span>
         </h2>
+
         <div className="line" />
       </div>
 
@@ -245,8 +272,8 @@ function Uttarakhand() {
             <h3>Her Mountain Story</h3>
 
             <p>
-              Mountains, rivers, peace and happiness — a journey through
-              places as beautiful as the memories they hold.
+              Mountains, rivers, peace and happiness — a journey
+              through places as beautiful as the memories they hold.
             </p>
           </div>
 
@@ -284,6 +311,7 @@ function Uttarakhand() {
                     stdDeviation="4"
                     result="b"
                   />
+
                   <feMerge>
                     <feMergeNode in="b" />
                     <feMergeNode in="SourceGraphic" />
@@ -316,9 +344,10 @@ function Uttarakhand() {
                 <g
                   key={name}
                   onClick={() => setActive(name)}
-                  className={`map-pin ${
-                    active === name ? "active" : ""
-                  }`}
+                  className={
+                    "map-pin " +
+                    (active === name ? "active" : "")
+                  }
                 >
                   <circle
                     cx={x}
@@ -353,24 +382,24 @@ function Uttarakhand() {
         </TiltCard>
 
         <div className="place-scroll" data-reveal>
-          {places.map(p => (
+          {places.map((place) => (
             <TiltCard
-              key={p.name}
+              key={place.name}
               className="place-card"
             >
               <img
-                src={p.image}
-                alt={`${p.name}, Uttarakhand`}
+                src={place.image}
+                alt={place.name + ", Uttarakhand"}
                 loading="lazy"
-                onError={e => {
-                  e.currentTarget.style.display = "none";
+                onError={(event) => {
+                  event.currentTarget.style.display = "none";
                 }}
               />
 
               <div>
-                <span>{p.icon}</span>
-                <h4>{p.name}</h4>
-                <p>{p.tag}</p>
+                <span>{place.icon}</span>
+                <h4>{place.name}</h4>
+                <p>{place.tag}</p>
               </div>
             </TiltCard>
           ))}
@@ -391,6 +420,7 @@ function Story() {
           data-reveal
         >
           <div className="story-girl" />
+
           <div className="floating-butterfly">
             🦋
           </div>
@@ -447,18 +477,16 @@ function FatherMessage() {
         <h2>मेरी प्यारी बेटी,</h2>
 
         <p>
-          हमेशा खुश रहो और अपने जीवन में आगे बढ़ती
-          रहो।
+          हमेशा खुश रहो और अपने जीवन में आगे बढ़ती रहो।
         </p>
 
         <p>
-          तुम्हारी मुस्कान हमेशा बनी रहे और तुम्हारे
-          सारे सपने पूरे हों।
+          तुम्हारी मुस्कान हमेशा बनी रहे और तुम्हारे सारे
+          सपने पूरे हों।
         </p>
 
         <p>
-          पापा का प्यार और आशीर्वाद हमेशा तुम्हारे साथ
-          है। ♥
+          पापा का प्यार और आशीर्वाद हमेशा तुम्हारे साथ है। ♥
         </p>
 
         <div className="sign">
@@ -485,13 +513,14 @@ function People() {
       </div>
 
       <div className="friends-grid" data-reveal>
-        {friends.map(([name, emoji], i) => (
+        {friends.map(([name, emoji], index) => (
           <button
-            key={name + i}
-            className={`friend ${
-              selected === i ? "selected" : ""
-            }`}
-            onClick={() => setSelected(i)}
+            key={name + index}
+            className={
+              "friend " +
+              (selected === index ? "selected" : "")
+            }
+            onClick={() => setSelected(index)}
           >
             <span className="avatar">
               {emoji}
@@ -505,7 +534,8 @@ function People() {
       <p className="people-caption">
         {selected === null
           ? "Tap any star in her universe ✨"
-          : `${friends[selected][0]} is part of Kajal Didi's beautiful universe 💖`}
+          : friends[selected][0] +
+            " is part of Kajal Didi's beautiful universe 💖"}
       </p>
     </section>
   );
@@ -518,7 +548,9 @@ function Doggy() {
         className="doggy-card glass"
         data-reveal
       >
-        <div className="doggy-art">🐶</div>
+        <div className="doggy-art">
+          🐶
+        </div>
 
         <div>
           <p className="eyebrow">
@@ -548,9 +580,10 @@ function Surprise() {
 
   return (
     <section
-      className={`surprise section-shell ${
-        open ? "opened" : ""
-      }`}
+      className={
+        "surprise section-shell " +
+        (open ? "opened" : "")
+      }
     >
       <Petals />
       <Stars />
@@ -571,10 +604,20 @@ function Surprise() {
           className="gift-wrap"
           onClick={() => setOpen(!open)}
           role="button"
-          tabIndex="0"
+          tabIndex={0}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              setOpen(!open);
+            }
+          }}
         >
-          <div className="gift-lid">✦</div>
-          <div className="gift-box">🎁</div>
+          <div className="gift-lid">
+            ✦
+          </div>
+
+          <div className="gift-box">
+            🎁
+          </div>
         </div>
 
         {!open ? (
@@ -591,9 +634,9 @@ function Surprise() {
             </h3>
 
             <p>
-              May your life always be filled with
-              happiness, beautiful memories, love and
-              endless reasons to smile.
+              May your life always be filled with happiness,
+              beautiful memories, love and endless reasons
+              to smile.
             </p>
 
             <div className="fireworks">
@@ -612,12 +655,13 @@ function App() {
   const [music, setMusic] = useState(false);
   const audioRef = useRef(null);
 
-  const start = () =>
+  const start = () => {
     document
       .querySelector("#uttarakhand")
       ?.scrollIntoView({
         behavior: "smooth"
       });
+  };
 
   const toggleMusic = async () => {
     const audio = audioRef.current;
@@ -638,7 +682,6 @@ function App() {
         "Music could not start:",
         error
       );
-
       setMusic(false);
     }
   };
