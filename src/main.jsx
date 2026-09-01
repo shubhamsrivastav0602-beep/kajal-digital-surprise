@@ -13,8 +13,8 @@ const places = [
   { name: "Nainital", icon: "🌊", tag: "Serenity in the air", image: "https://images.unsplash.com/photo-1626621331169-5f34be280ed9?auto=format&fit=crop&w=900&q=85" },
   { name: "Rishikesh", icon: "🕉️", tag: "Peace of soul", image: "https://images.unsplash.com/photo-1593693397690-362cb9666fc2?auto=format&fit=crop&w=900&q=85" },
   { name: "Auli", icon: "🏔️", tag: "Snow & mountains", image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=85" },
-  { name: "Kedarnath", icon: "🙏", tag: "Divine blessings", image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=85" },
-  { name: "Mussoorie", icon: "🌄", tag: "Queen of hills", image: "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=900&q=85" }
+  { name: "Kedarnath", icon: "🙏", tag: "Divine blessings", image: "https://unsplash.com/photos/kedarnath-temple-in-himalayan-mountains-5vDTocCCutE" },
+  { name: "Mussoorie", icon: "🌄", tag: "Queen of hills", image: "https://unsplash.com/photos/aerial-photography-of-city-surrounded-by-mountains-during-daytime-onDrYTEH31g" }
 ];
 
 function useReveal() {
@@ -225,13 +225,34 @@ function Surprise() {
 function App() {
   useReveal();
   const [music, setMusic] = useState(false);
+  const audioRef = useRef(null);
   const start = () => document.querySelector("#uttarakhand")?.scrollIntoView({ behavior: "smooth" });
 
+  const toggleMusic = async () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    try {
+      if (audio.paused) {
+        audio.volume = 0.45;
+        await audio.play();
+        setMusic(true);
+      } else {
+        audio.pause();
+        setMusic(false);
+      }
+    } catch (error) {
+      console.error("Music could not start:", error);
+      setMusic(false);
+    }
+  };
+
   return <>
+    <audio ref={audioRef} src="/kajal.mp3" loop preload="auto" />
     <main>
       <nav className="mobile-nav">
         <div className="brand">K<span>♥</span>M</div>
-        <button onClick={() => setMusic(!music)}>{music ? "♫ Playing" : "♫ Music"}</button>
+        <button onClick={toggleMusic}>{music ? "♫ Playing" : "♫ Music"}</button>
       </nav>
       <Hero onStart={start} />
       <Uttarakhand />
